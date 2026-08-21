@@ -165,5 +165,5 @@ gl.useProgram(program);
 gl.drawArrays(
     gl.LINES,
     0, 
-    6
+    vertices.length / 2
 );

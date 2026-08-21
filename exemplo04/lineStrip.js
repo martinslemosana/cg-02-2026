@@ -167,5 +167,5 @@ gl_strip.useProgram(program_strip);
 gl_strip.drawArrays(
     gl_strip.LINE_STRIP,
     0, 
-    5
+    vertices_strip.length / 2
 );

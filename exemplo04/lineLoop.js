@@ -176,5 +176,5 @@ gl_lineLoop.useProgram(program_lineLoop);
 gl_lineLoop.drawArrays(
     gl_lineLoop.LINE_LOOP,
     0, 
-    6
+    vertices_lineLoop.length / 2
 );

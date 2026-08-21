@@ -208,5 +208,5 @@ gl_points.useProgram(program_points);
 gl_points.drawArrays(
     gl_points.LINE_POINTS,
     0, 
-    9
+    vertices_points.length / 2
 );

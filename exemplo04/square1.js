@@ -217,5 +217,5 @@ gl_square1.useProgram(program_square1);
 gl_square1.drawArrays(
     gl_square1.TRIANGLES,
     0, 
-    6
+    vertices_square1.length / 2
 );
