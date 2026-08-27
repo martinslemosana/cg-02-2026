@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Interação - Mouse e Teclado</title>
+
+    <style>
+
+      #colorBox {
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          background-color: red;
+          border: 1px solid black;
+          vertical-align: text-top;
+      }
+
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <div>
+        <p id="canvasCoordinates">
+            Canvas: (300, 300)
+        </p>
+
+        <p id="webglCoordinates">
+            WebGL: (0.000, 0.000)
+        </p>
+        <p>
+          Cor:
+          <span id="colorBox"></span>
+        </p>
+    </div>
+
+    <script src="main.js"></script>
+
+</body>
+</html>
