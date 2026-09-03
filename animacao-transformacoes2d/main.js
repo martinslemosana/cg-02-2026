@@ -78,8 +78,8 @@ let color = new Float32Array([
 // 1. TRANSFORMAÇÃO
 // --------------------------------------------------
 
-let tx = -0.5;
-let ty = -0.5;
+let tx = 0.0;
+let ty = 0.0;
 
 let txOffset = 0.005;
 let tyOffset = 0.005;
@@ -449,11 +449,11 @@ function atualizaTransformacao(){
     tx += txOffset;
     ty += tyOffset;
 
-    if (tx > 0.5 || tx < -0.5) {
+    if (tx > 1.0 || tx < 0.0) {
         txOffset = -txOffset;
     }
 
-    if (ty > 0.5 || ty < -0.5) {
+    if (ty > 1.0 || ty < 0.0) {
         tyOffset = -tyOffset;
     }
 
@@ -484,10 +484,12 @@ function drawTranslacao(){
     color = new Float32Array([1.0, 0.3, 0.3]);
     drawTriangulo(gl1, verticesBufferTranslacao, colorLocationTranslacao, transformLocationTranslacao, M_translacao, color);
 
-    M_translacao = m3.translation(tx, ty);
+    M_translacao = m3.translation(-0.5, -0.5);
+    M_translacao = m3.multiply(m3.translation(tx, ty),M_translacao);
     color = new Float32Array([0.2, 0.6, 1.0]);
     drawTriangulo(gl1, verticesBufferTranslacao, colorLocationTranslacao, transformLocationTranslacao, M_translacao, color);
 
+    M_translacao = m3.translation(tx, ty);
     atualizarMatrizTranslacao();
 }
 
