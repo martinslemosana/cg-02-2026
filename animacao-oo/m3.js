@@ -74,5 +74,16 @@ var m3 = {
   rotate: function(m,angleInRadians){
     var r = m3.rotation(angleInRadians);
     return m3.multiply(r,m);
+  },
+
+  setClippingWindow: function(xw_min, yw_min, xw_max, yw_max) {
+    // Create the clipping matrix
+    var clippingMatrix = [
+      2 / (xw_max-xw_min), 0, 0,
+      0, 2 / (yw_max-yw_min), 0,
+      -(xw_max + xw_min) / (xw_max - xw_min), -(yw_max + yw_min) / (yw_max - yw_min), 1
+    ];
+
+    return clippingMatrix;
   }
 };
