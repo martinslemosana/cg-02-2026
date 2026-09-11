@@ -86,4 +86,5 @@ var m3 = {
 
     return clippingMatrix;
   }
+  
 };

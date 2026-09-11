@@ -5,10 +5,6 @@ if (!gl) {
     throw new Error("WebGL 2 não é suportado.");
 }
 
-// ==================================================
-// SHADERS
-// ==================================================
-
 const vertexShaderSource = `#version 300 es
 
 in vec2 aPosition;
@@ -43,11 +39,6 @@ void main() {
 }
 `;
 
-
-// ==================================================
-// CRIAR SHADER
-// ==================================================
-
 function createShader(gl, type, source) {
 
     const shader =
@@ -77,11 +68,6 @@ function createShader(gl, type, source) {
 
     return shader;
 }
-
-
-// ==================================================
-// CRIAR PROGRAMA
-// ==================================================
 
 function createProgram(
     gl,
@@ -149,13 +135,8 @@ const program =
 class Renderer {
 
     constructor(gl, program) {
-
         this.gl = gl;
         this.program = program;
-
-        // ------------------------------------------
-        // LOCALIZAÇÕES
-        // ------------------------------------------
 
         this.positionLocation =
             gl.getAttribLocation(
@@ -181,44 +162,20 @@ class Renderer {
                 "u_modelTransform"
             );
 
-        // ------------------------------------------
-        // VIEW TRANSFORM
-        // ------------------------------------------
-
         this.viewTransform =
             m3.identity();
-
-        // ------------------------------------------
-        // BUFFER
-        // ------------------------------------------
 
         this.verticesBuffer =
             gl.createBuffer();
     }
 
-
-    // ==================================================
-    // DEFINIR VIEW TRANSFORM
-    // ==================================================
-
-    definirViewTransform(viewTransform) {
-
+    defineViewTransform(viewTransform) {
         this.viewTransform =
             viewTransform;
     }
 
-
-    // ==================================================
-    // DESENHAR OBJETO
-    // ==================================================
-
-    desenhar(objeto) {
-
+    draw(object) {
         const gl = this.gl;
-
-        // ------------------------------------------
-        // BUFFER
-        // ------------------------------------------
 
         gl.bindBuffer(
             gl.ARRAY_BUFFER,
@@ -227,13 +184,9 @@ class Renderer {
 
         gl.bufferData(
             gl.ARRAY_BUFFER,
-            objeto.vertices,
+            object.vertices,
             gl.STATIC_DRAW
         );
-
-        // ------------------------------------------
-        // ATRIBUTO DE POSIÇÃO
-        // ------------------------------------------
 
         gl.enableVertexAttribArray(
             this.positionLocation
@@ -248,28 +201,16 @@ class Renderer {
             0
         );
 
-        // ------------------------------------------
-        // COR
-        // ------------------------------------------
-
         gl.uniform3fv(
             this.colorLocation,
-            objeto.color
+            object.color
         );
-
-        // ------------------------------------------
-        // MODEL TRANSFORM
-        // ------------------------------------------
 
         gl.uniformMatrix3fv(
             this.modelTransformLocation,
             false,
-            objeto.modelTransform
+            object.modelTransform
         );
-
-        // ------------------------------------------
-        // VIEW TRANSFORM
-        // ------------------------------------------
 
         gl.uniformMatrix3fv(
             this.viewTransformLocation,
@@ -277,106 +218,34 @@ class Renderer {
             this.viewTransform
         );
 
-        // ------------------------------------------
-        // DESENHAR
-        // ------------------------------------------
-
         gl.drawArrays(
             gl.TRIANGLES,
             0,
-            objeto.vertices.length / 2
+            object.vertices.length / 2
         );
     }
 }
 
-
 // ==================================================
-// GEOMETRIA DA RUA
+// AUXILIARY FUNCTIONS
 // ==================================================
 
-function verticesRua() {
+function rectangleVertices(x,y,width,height){
+    return [
+        x, y,
+        x+width, y+height,
+        x, y+height,
 
-    return new Float32Array([
-
-        -2.0,  0.4,
-        -2.0, -0.4,
-         2.0,  0.4,
-
-         2.0,  0.4,
-        -2.0, -0.4,
-         2.0, -0.4
-
-    ]);
+        x, y,
+        x+width, y,
+        x+width, y+height
+    ];
 }
 
-
-// ==================================================
-// GEOMETRIA DO CARRO
-// ==================================================
-
-function verticesCarro() {
-
-    return new Float32Array([
-
-        // ------------------------------------------
-        // Parte inferior esquerda
-        // ------------------------------------------
-
-        -0.2,  0.1,
-        -0.2,  0.0,
-        -0.1,  0.1,
-
-        -0.1,  0.1,
-        -0.2,  0.0,
-        -0.1,  0.0,
-
-
-        // ------------------------------------------
-        // Parte central
-        // ------------------------------------------
-
-        -0.1,  0.2,
-        -0.1,  0.0,
-         0.1,  0.2,
-
-         0.1,  0.2,
-        -0.1,  0.0,
-         0.1,  0.0,
-
-
-        // ------------------------------------------
-        // Parte inferior direita
-        // ------------------------------------------
-
-         0.1,  0.1,
-         0.1,  0.0,
-         0.2,  0.1,
-
-         0.2,  0.1,
-         0.1,  0.0,
-         0.2,  0.0
-
-    ]);
-}
-
-
-// ==================================================
-// GEOMETRIA DA RODA
-// ==================================================
-
-function verticesRoda() {
-
+function circleVertices(radius,numSegments){
     const vertices = [];
 
-    const numSegments = 6;
-    const radius = 0.1;
-
-    for (
-        let i = 0;
-        i < numSegments;
-        i++
-    ) {
-
+    for (let i = 0; i < numSegments; i++) {
         const theta1 =
             (i / numSegments) *
             2 * Math.PI;
@@ -386,19 +255,10 @@ function verticesRoda() {
             2 * Math.PI;
 
 
-        // ------------------------------------------
-        // CENTRO
-        // ------------------------------------------
-
         vertices.push(
             0,
             0
         );
-
-
-        // ------------------------------------------
-        // PRIMEIRO PONTO
-        // ------------------------------------------
 
         vertices.push(
             radius * Math.cos(theta1),
@@ -406,15 +266,50 @@ function verticesRoda() {
         );
 
 
-        // ------------------------------------------
-        // SEGUNDO PONTO
-        // ------------------------------------------
-
         vertices.push(
             radius * Math.cos(theta2),
             radius * Math.sin(theta2)
         );
     }
+
+    return vertices;
+}
+
+// ==================================================
+// ROAD VERTICES
+// ==================================================
+
+function roadVertices() {
+
+    const vertices = rectangleVertices(-2.0,-0.4,4.0,0.8);
+
+    return new Float32Array(vertices);
+}
+
+
+// ==================================================
+// CAR BODYWORK VERTICES
+// ==================================================
+
+function carBodyworkVertices() {
+
+    const vertices = [];
+
+    vertices.push(...rectangleVertices(-0.2,0.0,0.1,0.1));
+    vertices.push(...rectangleVertices(-0.1,0.0,0.2,0.2));
+    vertices.push(...rectangleVertices(0.1,0.0,0.1,0.1));
+
+    return new Float32Array(vertices);
+}
+
+
+// ==================================================
+// CAR WHEEL VERTICES
+// ==================================================
+
+function carWheelVertices() {
+
+    const vertices = circleVertices(0.05,6);
 
     return new Float32Array(vertices);
 }
@@ -428,53 +323,30 @@ class SceneObject {
 
     constructor(vertices, color) {
 
-        // ------------------------------------------
-        // GEOMETRIA
-        // ------------------------------------------
+        this.vertices = vertices;
 
-        this.vertices =
-            vertices;
+        this.color = color; 
 
-        // ------------------------------------------
-        // APARÊNCIA
-        // ------------------------------------------
-
-        this.color =
-            color;
-
-        // ------------------------------------------
-        // MODEL TRANSFORM
-        // ------------------------------------------
-
-        this.modelTransform =
-            m3.identity();
+        this.modelTransform = m3.identity();
     }
 
+    updateModelTransform(modelTransform) {
 
-    // ==================================================
-    // ATUALIZAR TRANSFORMAÇÃO
-    // ==================================================
-
-    atualizarTransformacao(modelTransform) {
-
-        this.modelTransform =
-            modelTransform;
+        this.modelTransform = modelTransform;
     }
 }
 
 
 // ==================================================
-// CLASSE RUA
+// CLASSE ROAD
 // ==================================================
 
-class Rua
-    extends SceneObject {
+class Road extends SceneObject {
 
     constructor() {
 
         super(
-
-            verticesRua(),
+            roadVertices(),
 
             new Float32Array([
                 0.2,
@@ -485,44 +357,42 @@ class Rua
     }
 
 
-    desenhar(renderer) {
+    draw(renderer) {
 
-        renderer.desenhar(this);
+        renderer.draw(this);
     }
 }
 
 
 // ==================================================
-// CLASSE CORPO DO CARRO
+// CLASSE CAR BODYWORK
 // ==================================================
 
-class CorpoCarro
-    extends SceneObject {
+class CarBodywork extends SceneObject {
 
-    constructor(cor) {
+    constructor(color) {
 
         super(
 
-            verticesCarro(),
+            carBodyworkVertices(),
 
-            cor
+            color
         );
     }
 }
 
 
 // ==================================================
-// CLASSE RODA
+// CLASSE CAR WHEEL
 // ==================================================
 
-class Roda
-    extends SceneObject {
+class CarWheel extends SceneObject {
 
-    constructor(posicaoX, angleSpeed) {
+    constructor(xPosition, angularSpeed) {
 
         super(
 
-            verticesRoda(),
+            carWheelVertices(),
 
             new Float32Array([
                 0.5,
@@ -531,289 +401,102 @@ class Roda
             ])
         );
 
-        // ------------------------------------------
-        // POSIÇÃO LOCAL
-        // ------------------------------------------
+        this.xPosition = xPosition;
 
-        this.posicaoX =
-            posicaoX;
+        this.theta = 0.0;
 
-        // ------------------------------------------
-        // ESCALA
-        // ------------------------------------------
-
-        this.scale =
-            0.5;
-
-        // ------------------------------------------
-        // ÂNGULO
-        // ------------------------------------------
-
-        this.theta =
-            0.0;
-
-        // ------------------------------------------
-        // VELOCIDADE ANGULAR
-        // ------------------------------------------
-
-        this.angleSpeed =
-            angleSpeed;
+        this.angularSpeed = angularSpeed;
     }
 
 
-    // ==================================================
-    // DEFINIR VELOCIDADE ANGULAR
-    // ==================================================
+    updateAngularSpeed(angularSpeed) {
 
-    definirVelocidadeAngular(angleSpeed) {
+        this.angularSpeed = angularSpeed;
+    }
 
-        this.angleSpeed =
-            angleSpeed;
+    updateRotation() {
+
+        this.theta += this.angularSpeed;
     }
 
 
-    // ==================================================
-    // ATUALIZAR ROTAÇÃO
-    // ==================================================
+    updateModelTransform(carModelTransform) {
 
-    girar(deltaTime) {
-
-        const dt =
-            deltaTime / 1000;
-
-        this.theta +=
-            this.angleSpeed * dt;
-    }
-
-
-    // ==================================================
-    // ATUALIZAR TRANSFORMAÇÃO
-    // ==================================================
-
-    atualizarTransformacao(
-        transformacaoCarro
-    ) {
-
-        // ------------------------------------------
-        // TRANSFORMAÇÃO LOCAL DA RODA
-        // ------------------------------------------
-
-        const transformacaoLocal =
+        const localTransform =
 
             m3.multiply(
-
-                m3.translation(
-                    this.posicaoX,
-                    0.0
-                ),
-
-                m3.multiply(
-
-                    m3.rotation(
-                        this.theta
-                    ),
-
-                    m3.scaling(
-                        this.scale,
-                        this.scale
-                    )
-                )
+                m3.translation(this.xPosition,0.0),
+                m3.rotation(this.theta)
             );
-
-
-        // ------------------------------------------
-        // TRANSFORMAÇÃO GLOBAL
-        // ------------------------------------------
 
         this.modelTransform =
 
             m3.multiply(
-
-                transformacaoCarro,
-
-                transformacaoLocal
+                carModelTransform,
+                localTransform
             );
     }
 }
 
 
 // ==================================================
-// CLASSE CARRO
+// CLASSE CAR
 // ==================================================
 
-class Carro {
+class Car {
 
-    constructor(tx, ty, cor, speed) {
+    constructor(tx, ty, color, speed) {
 
-        // ------------------------------------------
-        // ESTADO DO CARRO
-        // ------------------------------------------
+        this.tx = tx;
 
-        this.tx =
-            tx;
+        this.ty = ty;
 
-        this.ty =
-            ty;
+        this.speed = speed;
 
-        this.speed =
-            speed;
+        this.angularSpeed = -5.0;
 
-        this.angleSpeed =
-            -5.0;
+        this.carBodywork = new CarBodywork(color);
 
+        this.leftWheel = new CarWheel(-0.1,this.angularSpeed);
 
-        // ------------------------------------------
-        // PARTES DO CARRO
-        // ------------------------------------------
-
-        this.corpo =
-            new CorpoCarro(cor);
-
-        this.rodaEsquerda =
-            new Roda(
-                -0.1,
-                this.angleSpeed
-            );
-
-        this.rodaDireita =
-            new Roda(
-                0.1,
-                this.angleSpeed
-            );
+        this.rightWheel = new CarWheel(0.1, this.angularSpeed);
     }
 
+    move() {
 
-    // ==================================================
-    // MOVER CARRO
-    // ==================================================
+        this.tx += this.speed;
 
-    mover(deltaTime) {
+        if ( this.tx > 1.8 || this.tx < -1.8) {
 
-        const dt =
-            deltaTime / 1000;
+            this.speed = -this.speed;
+            
+            this.angularSpeed = -this.angularSpeed;
 
+            this.leftWheel.updateAngularSpeed(this.angularSpeed);
 
-        // ------------------------------------------
-        // ATUALIZAR POSIÇÃO
-        // ------------------------------------------
-
-        this.tx +=
-            this.speed * dt;
-
-
-        // ------------------------------------------
-        // INVERTER DIREÇÃO
-        // ------------------------------------------
-
-        if (
-            this.tx > 1.8 ||
-            this.tx < -1.8
-        ) {
-
-            this.speed =
-                -this.speed;
-
-            this.angleSpeed =
-                -this.angleSpeed;
-
-
-            // --------------------------------------
-            // ATUALIZAR VELOCIDADE DAS RODAS
-            // --------------------------------------
-
-            this.rodaEsquerda
-                .definirVelocidadeAngular(
-                    this.angleSpeed
-                );
-
-            this.rodaDireita
-                .definirVelocidadeAngular(
-                    this.angleSpeed
-                );
+            this.rightWheel.updateAngularSpeed(this.angularSpeed);
         }
 
+        const carTransform = m3.translation(this.tx,this.ty);
 
-        // ------------------------------------------
-        // TRANSFORMAÇÃO DO CARRO
-        // ------------------------------------------
+        this.carBodywork.updateModelTransform(carTransform);
 
-        const transformacaoCarro =
+        this.leftWheel.updateRotation();
 
-            m3.translation(
-                this.tx,
-                this.ty
-            );
+        this.rightWheel.updateRotation();
 
+        this.leftWheel.updateModelTransform(carTransform);
 
-        // ------------------------------------------
-        // TRANSFORMAÇÃO DO CORPO
-        // ------------------------------------------
-
-        this.corpo.atualizarTransformacao(
-            transformacaoCarro
-        );
-
-
-        // ------------------------------------------
-        // GIRAR RODAS
-        // ------------------------------------------
-
-        this.rodaEsquerda.girar(
-            deltaTime
-        );
-
-        this.rodaDireita.girar(
-            deltaTime
-        );
-
-
-        // ------------------------------------------
-        // TRANSFORMAÇÃO DAS RODAS
-        // ------------------------------------------
-
-        this.rodaEsquerda
-            .atualizarTransformacao(
-                transformacaoCarro
-            );
-
-        this.rodaDireita
-            .atualizarTransformacao(
-                transformacaoCarro
-            );
+        this.rightWheel.updateModelTransform(carTransform);
     }
 
+    draw(renderer) {
 
-    // ==================================================
-    // DESENHAR CARRO
-    // ==================================================
+        renderer.draw(this.carBodywork);
 
-    desenhar(renderer) {
+        renderer.draw(this.leftWheel);
 
-        // ------------------------------------------
-        // CORPO
-        // ------------------------------------------
-
-        renderer.desenhar(
-            this.corpo
-        );
-
-
-        // ------------------------------------------
-        // RODA ESQUERDA
-        // ------------------------------------------
-
-        renderer.desenhar(
-            this.rodaEsquerda
-        );
-
-
-        // ------------------------------------------
-        // RODA DIREITA
-        // ------------------------------------------
-
-        renderer.desenhar(
-            this.rodaDireita
-        );
+        renderer.draw(this.rightWheel);
     }
 }
 
@@ -826,250 +509,59 @@ class Scene {
 
     constructor(gl, program) {
 
-        // ------------------------------------------
-        // RENDERER
-        // ------------------------------------------
+        this.renderer = new Renderer(gl,program);
 
-        this.renderer =
-            new Renderer(
-                gl,
-                program
-            );
+        this.viewTransform = m3.setClippingWindow(-2.0,-1.0,2.0,1.0);
 
+        this.renderer.defineViewTransform(this.viewTransform);
 
-        // ------------------------------------------
-        // VIEW TRANSFORM
-        // ------------------------------------------
+        this.road = new Road();
 
-        this.viewTransform =
-            m3.setClippingWindow(-2.0,-1.0,2.0,1.0);
+        this.cars = [
 
+            new Car(0.5,0.2,new Float32Array([1.0,0.0,0.0]),0.003),
 
-        // ------------------------------------------
-        // INFORMAR A VIEW AO RENDERER
-        // ------------------------------------------
+            new Car(0.0,0.0,new Float32Array([1.0,1.0,0.0]),0.004),
 
-        this.renderer
-            .definirViewTransform(
-                this.viewTransform
-            );
+            new Car(-0.2,-0.1,new Float32Array([0.0,0.0,1.0]),0.005),
 
+            new Car(-0.9,-0.3,new Float32Array([0.0,1.0,0.0]),0.001)
 
-        // ------------------------------------------
-        // OBJETOS DA CENA
-        // ------------------------------------------
-
-        this.rua =
-            new Rua();
-
-
-        // ------------------------------------------
-        // CARROS
-        // ------------------------------------------
-
-        this.carros = [
-
-            new Carro(
-                0.5,
-                0.2,
-                new Float32Array([
-                    1.0,
-                    0.0,
-                    0.0
-                ]),
-                0.3
-            ),
-
-            new Carro(
-                0.0,
-                0.0,
-                new Float32Array([
-                    1.0,
-                    1.0,
-                    0.0
-                ]),
-                0.4
-            ),
-
-            new Carro(
-                -0.2,
-                -0.1,
-                new Float32Array([
-                    0.0,
-                    0.0,
-                    1.0
-                ]),
-                0.5
-            ),
-
-            new Carro(
-                -0.9,
-                -0.3,
-                new Float32Array([
-                    0.0,
-                    1.0,
-                    0.0
-                ]),
-                0.1
-            )
         ];
-
-
-        // ------------------------------------------
-        // CONTROLE DO TEMPO
-        // ------------------------------------------
-
-        this.ultimoTempo =
-            null;
     }
 
+    update() {
 
-    // ==================================================
-    // ATUALIZAR
-    // ==================================================
-
-    atualizar(deltaTime) {
-
-        for (
-            const carro of this.carros
-        ) {
-
-            carro.mover(
-                deltaTime
-            );
+        for (const car of this.cars) {
+            car.move();
         }
     }
 
+    draw() {
 
-    // ==================================================
-    // DESENHAR
-    // ==================================================
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
-    desenhar() {
+        gl.useProgram(program);
 
-        // ------------------------------------------
-        // LIMPAR TELA
-        // ------------------------------------------
+        this.road.draw(this.renderer);
 
-        gl.clear(
-            gl.COLOR_BUFFER_BIT
-        );
-
-
-        // ------------------------------------------
-        // USAR PROGRAMA
-        // ------------------------------------------
-
-        gl.useProgram(
-            program
-        );
-
-
-        // ------------------------------------------
-        // DESENHAR RUA
-        // ------------------------------------------
-
-        this.rua.desenhar(
-            this.renderer
-        );
-
-
-        // ------------------------------------------
-        // DESENHAR CARROS
-        // ------------------------------------------
-
-        for (
-            const carro of this.carros
-        ) {
-
-            carro.desenhar(
-                this.renderer
-            );
+        for (const car of this.cars) {
+            car.draw(this.renderer);
         }
     }
 
+    execute() {
 
-    // ==================================================
-    // LOOP DA ANIMAÇÃO
-    // ==================================================
+        this.update();
 
-    executar(tempoAtual) {
+        this.draw();
 
-        // ------------------------------------------
-        // PRIMEIRO FRAME
-        // ------------------------------------------
-
-        if (
-            this.ultimoTempo === null
-        ) {
-
-            this.ultimoTempo =
-                tempoAtual;
-
-            requestAnimationFrame(
-                (tempo) =>
-                    this.executar(tempo)
-            );
-
-            return;
-        }
-
-
-        // ------------------------------------------
-        // DELTA TIME
-        // ------------------------------------------
-
-        const deltaTime =
-
-            tempoAtual -
-            this.ultimoTempo;
-
-
-        // ------------------------------------------
-        // GUARDAR TEMPO ATUAL
-        // ------------------------------------------
-
-        this.ultimoTempo =
-            tempoAtual;
-
-
-        // ------------------------------------------
-        // ATUALIZAR
-        // ------------------------------------------
-
-        this.atualizar(
-            deltaTime
-        );
-
-
-        // ------------------------------------------
-        // DESENHAR
-        // ------------------------------------------
-
-        this.desenhar();
-
-
-        // ------------------------------------------
-        // PRÓXIMO FRAME
-        // ------------------------------------------
-
-        requestAnimationFrame(
-            (tempo) =>
-                this.executar(tempo)
-        );
+        requestAnimationFrame(() => this.execute());
     }
 
+    init() {
 
-    // ==================================================
-    // INICIAR
-    // ==================================================
-
-    iniciar() {
-
-        requestAnimationFrame(
-            (tempo) =>
-                this.executar(tempo)
-        );
+        requestAnimationFrame(() => this.execute());
     }
 }
 
@@ -1085,11 +577,6 @@ gl.clearColor(
     1.0
 );
 
-
-// ==================================================
-// VIEWPORT
-// ==================================================
-
 gl.viewport(
     0,
     0,
@@ -1103,14 +590,11 @@ gl.viewport(
 // ==================================================
 
 const scene =
-    new Scene(
-        gl,
-        program
-    );
+    new Scene(gl,program);
 
 
 // ==================================================
 // INICIAR ANIMAÇÃO
 // ==================================================
 
-scene.iniciar();
+scene.init();
