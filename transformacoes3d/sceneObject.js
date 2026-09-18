@@ -20,9 +20,6 @@ class SceneObject {
         // Eixo de rotação atual
         this.rotationAxis = null;
 
-        // Translação atual
-        this.translation = null;
-
         this.theta = 0.02;
 
         this.modelTransform = m4.identity();
