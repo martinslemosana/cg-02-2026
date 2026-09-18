@@ -10,40 +10,15 @@ class Scene {
             new Renderer(gl, program);
 
         // Figura que será exibida
-        this.helicopterBody =
-        new SceneObject(
-            helicopterBodyGeometry.vertices,
-            helicopterBodyGeometry.colors,
-            helicopterBodyGeometry.indices,
-        );
+        this.helicopterBody = new HelicopterBody();
 
-        this.helicopterTopShaft =
-        new SceneObject(
-            helicopterTopShaftGeometry.vertices,
-            helicopterTopShaftGeometry.colors,
-            helicopterTopShaftGeometry.indices,
-        );
+        this.helicopterTopShaft = new HelicopterTopShaft();
 
-        this.helicopteTail =
-        new SceneObject(
-            helicopterTailGeometry.vertices,
-            helicopterTailGeometry.colors,
-            helicopterTailGeometry.indices,
-        );
+        this.helicopterTail = new HelicopterTail();
 
-        this.helicopterPropellers =
-        new SceneObject(
-            helicopterPropellersGeometry.vertices,
-            helicopterPropellersGeometry.colors,
-            helicopterPropellersGeometry.indices,
-        );
+        this.helicopterPropellers = new HelicopterPropellers();
 
-        this.helicopterTailPropeller =
-        new SceneObject(
-            helicopterTailPropellerGeometry.vertices,
-            helicopterTailPropellerGeometry.colors,
-            helicopterTailPropellerGeometry.indices
-        );
+        this.helicopterTailPropeller = new HelicopterTailPropeller();
 
         this.theta = 0.0;
     }
@@ -52,7 +27,7 @@ class Scene {
         this.theta += 0.01;
         this.helicopterBody.update(m4.xRotation(this.theta));
         this.helicopterTopShaft.update(m4.xRotation(this.theta));
-        this.helicopteTail.update(m4.xRotation(this.theta));
+        this.helicopterTail.update(m4.xRotation(this.theta));
         this.helicopterPropellers.update(m4.xRotation(this.theta));
         this.helicopterTailPropeller.update(m4.xRotation(this.theta));
     }
@@ -74,7 +49,7 @@ class Scene {
             this.renderer
         );
 
-        this.helicopteTail.draw(
+        this.helicopterTail.draw(
             this.renderer
         );
 
