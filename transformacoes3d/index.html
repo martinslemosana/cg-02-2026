@@ -1,13 +1,315 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Animação com Orientação a Objeto</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Transformações 3D</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #26364d,
+                    #111827 55%,
+                    #080c14
+                );
+
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+
+            padding: 30px;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.4);
+
+            backdrop-filter: blur(10px);
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 15px;
+
+            background: #080c14;
+
+            border-radius: 14px;
+
+            box-shadow:
+                inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        canvas {
+            display: block;
+
+            width: 600px;
+            height: 600px;
+
+            border-radius: 8px;
+        }
+
+        .panel {
+            width: 260px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            margin: 0 0 25px;
+
+            color: #aeb9c9;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            color: #7dd3fc;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 14px;
+
+            color: #dbe4f0;
+        }
+
+        kbd {
+            min-width: 38px;
+
+            padding: 5px 8px;
+
+            text-align: center;
+
+            background: #1e293b;
+
+            border: 1px solid #475569;
+
+            border-radius: 6px;
+
+            color: white;
+
+            font-family: monospace;
+            font-size: 13px;
+
+            box-shadow: 0 2px 0 #0f172a;
+        }
+
+        .footer {
+            margin-top: 25px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+            color: #64748b;
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-    <canvas id="canvas" width="600" height="600"></canvas>
+    <div class="container">
+
+        <!-- ==================================================
+             CANVAS
+        ================================================== -->
+
+        <div class="canvas-container">
+
+            <canvas
+                id="canvas"
+                width="600"
+                height="600">
+            </canvas>
+
+        </div>
+
+
+        <!-- ==================================================
+             PAINEL DE CONTROLES
+        ================================================== -->
+
+        <div class="panel">
+
+            <h1>Transformações 3D</h1>
+
+            <p class="subtitle">
+                Animação com Orientação a Objetos
+            </p>
+
+
+            <div class="section">
+
+                <div class="section-title">
+                    Objetos
+                </div>
+
+                <div class="controls">
+
+                    <div class="control">
+                        <kbd>1</kbd>
+                        Cubo
+                    </div>
+
+                    <div class="control">
+                        <kbd>2</kbd>
+                        Pirâmide
+                    </div>
+
+                    <div class="control">
+                        <kbd>3</kbd>
+                        Octaedro
+                    </div>
+
+                    <div class="control">
+                        <kbd>4</kbd>
+                        Prisma hexagonal
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section">
+
+                <div class="section-title">
+                    Rotação
+                </div>
+
+                <div class="controls">
+
+                    <div class="control">
+                        <kbd>X</kbd>
+                        Rotacionar em X
+                    </div>
+
+                    <div class="control">
+                        <kbd>Y</kbd>
+                        Rotacionar em Y
+                    </div>
+
+                    <div class="control">
+                        <kbd>Z</kbd>
+                        Rotacionar em Z
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section">
+
+                <div class="section-title">
+                    Translação
+                </div>
+
+                <div class="controls">
+
+                    <div class="control">
+                        <kbd>↑</kbd>
+                        Mover para cima
+                    </div>
+
+                    <div class="control">
+                        <kbd>↓</kbd>
+                        Mover para baixo
+                    </div>
+
+                    <div class="control">
+                        <kbd>←</kbd>
+                        Mover para esquerda
+                    </div>
+
+                    <div class="control">
+                        <kbd>→</kbd>
+                        Mover para direita
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer">
+
+                <strong>WebGL 2.0</strong><br>
+                Transformações geométricas em 3D
+                utilizando matrizes e orientação a objetos.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         JAVASCRIPT
+    ================================================== -->
 
     <script src="m4.js"></script>
     <script src="geometry.js"></script>
@@ -17,4 +319,5 @@
     <script src="main.js"></script>
 
 </body>
+
 </html>
