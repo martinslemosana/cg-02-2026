@@ -585,30 +585,3 @@ const hexagonalPrismGeometry = {
     colors: hexagonalPrismColors(),
     indices: hexagonalPrismIndices()
 };
-
-// ==================================================
-// CREATE OBJECT
-// ==================================================
-
-function createObject(
-    geometry,
-    thetaSpeed,
-    tx,
-    ty,
-    rx,
-    ry,
-    rz
-) {
-
-    return new SceneObject(
-        geometry.vertices,
-        geometry.colors,
-        geometry.indices,
-        thetaSpeed,
-        tx,
-        ty,
-        rx,
-        ry,
-        rz
-    );
-}
