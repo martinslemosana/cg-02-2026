@@ -17,12 +17,22 @@ class Scene {
             [0, 0, 0],  // Ponto de referência (Pref)
             [0, 1, 0]   // Vetor "up" (V)
         );
-
+/*
         this.projectionTransform = m4.setPerspectiveProjectionMatrix(
             -1, 1,   // left, right
             -1, 1,   // bottom, top
             -5, -100 // near, far
         );
+*/
+
+        const fov = 30 * Math.PI / 180;
+	const aspect = canvas.width / canvas.height;
+	const near = -5;
+	const far = -100;
+
+	this.projectionTransform = m4.setPerspectiveProjectionMatrixAngle(
+    		fov, aspect, near, far
+	);
 
         this.theta = 0.0;
     }

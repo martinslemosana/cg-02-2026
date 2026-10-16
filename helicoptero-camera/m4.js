@@ -195,6 +195,19 @@ var m4 = {
       (xw_max+xw_min)/(xw_max-xw_min), (yw_max+yw_min)/(yw_max-yw_min), (z_near+z_far)/(z_near-z_far), -1,
       0, 0, -(2*z_near*z_far)/(z_near-z_far), 0
     ];
+  },
+
+  setPerspectiveProjectionMatrixAngle: function(fov, aspect, near, far) {
+
+    const f = 1.0 / Math.tan(fov / 2);
+    const rangeInv = 1.0 / (near - far);
+
+    return [
+        f / aspect, 0, 0, 0,
+        0, f, 0, 0,
+        0, 0, (near + far) * rangeInv, -1,
+        0, 0, -2 * near * far * rangeInv, 0
+    ];
   }
 
 };
