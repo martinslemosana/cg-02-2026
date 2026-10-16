@@ -24,8 +24,8 @@ class Scene {
             -5, -100 // near, far
         );
 */
-
-        const fov = 30 * Math.PI / 180;
+	
+	const fov = 30 * Math.PI / 180;
 	const aspect = canvas.width / canvas.height;
 	const near = -5;
 	const far = -100;
