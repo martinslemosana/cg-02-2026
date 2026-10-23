@@ -61,23 +61,12 @@ void main() {
     // 1. Componente ambiente: não depende desta luz
     vec3 ambient = 0.2 * ambientReflection;
 
-    // 3. Atenuação em função da distância
-    float kc = 1.0;
-    float kl = 0.05;
-    float kq = 0.005;
-
-    float attenuation = 1.0 / (
-        kc +
-        kl * distanceToLight +
-        kq * distanceToLight * distanceToLight
-    );
-
-    // 4. Componente difusa
+    // 2. Componente difusa
     float diffuseFactor = max(dot(N, L), 0.0);
 
     vec3 diffuse = diffuseFactor * diffuseReflection;
 
-    // 5. Componente especular
+    // 3. Componente especular
     float specularFactor = 0.0;
 
     if (diffuseFactor > 0.0) {
@@ -92,10 +81,21 @@ void main() {
 
     vec3 specular = specularFactor * specularReflection;
 
-    // 6. Atenuação aplicada à luz direta
+    // 4. Atenuação em função da distância
+    float a0 = 1.0;
+    float a1 = 0.05;
+    float a2 = 0.005;
+
+    float attenuation = 1.0 / (
+        a0 +
+        a1 * distanceToLight +
+        a2 * distanceToLight * distanceToLight
+    );
+    
+    // 5. Atenuação aplicada à luz direta
     vec3 directLight = attenuation * (diffuse + specular);
 
-    // 7. Cor final
+    // 6. Cor final
     vec3 finalColor = ambient + directLight;
 
     outColor = vec4(
