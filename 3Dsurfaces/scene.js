@@ -129,7 +129,7 @@ class Scene {
                 break;
             case "7":
                 this.color = [Math.random(), Math.random(), Math.random()];
-                this.object = new Cylinder();
+                this.object = new WavyCylinder();
                 break;
             case "8":
                 this.color = [Math.random(), Math.random(), Math.random()];

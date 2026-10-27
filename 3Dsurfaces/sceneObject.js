@@ -131,12 +131,12 @@ class WineGlass extends SceneObject{
     }
 }
 
-class Cylinder extends SceneObject{
+class WavyCylinder extends SceneObject{
     constructor(){
         super(
-            cylinderGeometry.vertices,
-            cylinderGeometry.normals,
-            cylinderGeometry.indices
+            wavyCylinderGeometry.vertices,
+            wavyCylinderGeometry.normals,
+            wavyCylinderGeometry.indices
         );
     }
 

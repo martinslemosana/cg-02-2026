@@ -1,3 +1,7 @@
+// ==================================================
+// GENERATE CUBE VERTICES
+// ==================================================
+
 function generateCubeVertices(size) {
 
     const h = size / 2;
@@ -41,6 +45,10 @@ function generateCubeVertices(size) {
     ];
 }
 
+// ==================================================
+// GENERATE CUBE INDICES
+// ==================================================
+
 function generateCubeIndices() {
 
     const indices = [];
@@ -66,6 +74,10 @@ function generateCubeIndices() {
 
     return indices;
 }
+
+// ==================================================
+// GENERATE SPHERE VERTICES
+// ==================================================
 
 function generateSphereVertices(radius, latitudeBands = 20, longitudeBands = 30) {
     const vertices = [];
@@ -94,6 +106,10 @@ function generateSphereVertices(radius, latitudeBands = 20, longitudeBands = 30)
 
     return vertices;
 }
+
+// ==================================================
+// GENERATE SPHERE INDICES
+// ==================================================
 
 function generateSphereIndices(latitudeBands = 20, longitudeBands = 30) {
     const indices = [];
@@ -127,6 +143,10 @@ function generateSphereIndices(latitudeBands = 20, longitudeBands = 30) {
     return indices;
 }
 
+// ==================================================
+// GENERATE TORUS VERTICES
+// ==================================================
+
 function generateTorusVertices(
     majorRadius,
     minorRadius,
@@ -159,6 +179,10 @@ function generateTorusVertices(
 
     return vertices;
 }
+
+// ==================================================
+// GENERATE TORUS INDICES
+// ==================================================
 
 function generateTorusIndices(
     majorSegments = 32,
@@ -194,6 +218,10 @@ function generateTorusIndices(
     return indices;
 }
 
+// ==================================================
+// GENERATE ELLIPSOID VERTICES
+// ==================================================
+
 function generateEllipsoidVertices(
     radiusX,
     radiusY,
@@ -227,6 +255,10 @@ function generateEllipsoidVertices(
 
     return vertices;
 }
+
+// ==================================================
+// GENERATE ELLIPSOID INDICES
+// ==================================================
 
 function generateEllipsoidIndices(
     latitudeBands = 20,
@@ -262,6 +294,10 @@ function generateEllipsoidIndices(
 
     return indices;
 }
+
+// ==================================================
+// GENERATE SUPERQUADRIC VERTICES
+// ==================================================
 
 function signedPower(value, exponent) {
     return Math.sign(value) * Math.pow(Math.abs(value), exponent);
@@ -310,6 +346,10 @@ function generateSuperquadricVertices(
 
     return vertices;
 }
+
+// ==================================================
+// GENERATE SUPERQUADRIC INDICES
+// ==================================================
 
 function generateSuperquadricIndices(
     latitudeBands = 30,
@@ -463,10 +503,10 @@ function generateWineGlassIndices() {
 }
 
 // ==================================================
-// GENERATE CYLINDER VERTICES
+// GENERATE WAVY CYLINDER VERTICES
 // ==================================================
 
-function generateCylinderVertices() {
+function generateWavyCylinderVertices() {
 
     const vertices = [];
 
@@ -503,10 +543,10 @@ function generateCylinderVertices() {
 }
 
 // ==================================================
-// GENERATE CYLINDER INDICES
+// GENERATE WAVY CYLINDER INDICES
 // ==================================================
 
-function generateCylinderIndices() {
+function generateWavyCylinderIndices() {
 
     const indices = [];
 
@@ -775,9 +815,9 @@ const wineGlassGeometry = addNormalsToGeometry(
     generateWineGlassIndices()
 );
 
-const cylinderGeometry = addNormalsToGeometry(
-    generateCylinderVertices(),
-    generateCylinderIndices()
+const wavyCylinderGeometry = addNormalsToGeometry(
+    generateWavyCylinderVertices(),
+    generateWavyCylinderIndices()
 );
 
 const springGeometry = addNormalsToGeometry(
