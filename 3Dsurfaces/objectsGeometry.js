@@ -346,6 +346,315 @@ function generateSuperquadricIndices(
     return indices;
 }
 
+// ==================================================
+// WINE GLASS PROFILE
+// ==================================================
+
+const wineGlassProfile = [
+    [0.00, -2.00],
+    [0.49, -2.00],
+    [0.82, -1.92],
+    [0.94, -1.84],
+    [0.88, -1.76],
+    [0.55, -1.66],
+
+    // Haste
+    [0.16, -1.60],
+    [0.088, -1.46],
+    [0.088, -0.23],
+    [0.14, -0.08],
+
+    // Transição para o bojo
+    [0.27, 0.08],
+    [0.55, 0.23],
+
+    // Parte externa do bojo
+    [0.84, 0.49],
+    [1.09, 0.84],
+    [1.25, 1.29],
+    [1.33, 1.71],
+    [1.33, 1.99],
+
+    // Borda da taça
+    [1.29, 2.00],
+    [1.23, 1.94],
+
+    // Parte interna do bojo
+    [1.21, 1.69],
+    [1.13, 1.33],
+    [0.98, 0.94],
+    [0.76, 0.64],
+    [0.49, 0.45],
+    [0.23, 0.35],
+    [0.00, 0.33]
+];
+
+const wineGlassSlices = 40;
+
+
+// ==================================================
+// GENERATE WINE GLASS VERTICES
+// ==================================================
+
+function generateWineGlassVertices() {
+
+    const vertices = [];
+
+    for (let i = 0; i < wineGlassProfile.length; i++) {
+
+        const r = wineGlassProfile[i][0];
+        const y = wineGlassProfile[i][1];
+
+        for (let j = 0; j < wineGlassSlices; j++) {
+
+            const theta = 2 * Math.PI * j / wineGlassSlices;
+
+            const x = r * Math.cos(theta);
+            const z = r * Math.sin(theta);
+
+            vertices.push(x, y, z);
+        }
+    }
+
+    return vertices;
+}
+
+
+// ==================================================
+// GENERATE WINE GLASS INDICES
+// ==================================================
+
+function generateWineGlassIndices() {
+
+    const indices = [];
+
+    for (let i = 0; i < wineGlassProfile.length - 1; i++) {
+
+        for (let j = 0; j < wineGlassSlices; j++) {
+
+            const nextJ = (j + 1) % wineGlassSlices;
+
+            const first = i * wineGlassSlices + j;
+            const nextAngle = i * wineGlassSlices + nextJ;
+
+            const nextProfile =
+                (i + 1) * wineGlassSlices + j;
+
+            const nextProfileAngle =
+                (i + 1) * wineGlassSlices + nextJ;
+
+            // Primeiro triângulo
+            indices.push(
+                first,
+                nextProfile,
+                nextAngle
+            );
+
+            // Segundo triângulo
+            indices.push(
+                nextAngle,
+                nextProfile,
+                nextProfileAngle
+            );
+        }
+    }
+
+    return indices;
+}
+
+// ==================================================
+// GENERATE CYLINDER VERTICES
+// ==================================================
+
+function generateCylinderVertices() {
+
+    const vertices = [];
+
+    const radius = 1.0;
+    const height = 8.0;
+
+    const slices = 40;
+    const stacks = 40;
+
+    let sinAngle = 0.0;
+    let sinAngleStep = 4*Math.PI/stacks;
+
+    // Gera as circunferências ao longo do eixo z
+    for (let i = 0; i <= stacks; i++) {
+
+        const z = (height * i / stacks)-(height/2);
+
+        // Gera os vértices de uma circunferência
+        for (let j = 0; j < slices; j++) {
+
+            const theta = 2 * Math.PI * j / slices;
+
+            const x = radius * Math.cos(theta) + 0.5 * Math.sin(sinAngle);
+            const y = radius * Math.sin(theta) + 0.5 * Math.sin(sinAngle);
+
+            vertices.push(x, y, z);
+        }
+        
+        console.log(Math.sin(sinAngle));
+        sinAngle += sinAngleStep;
+    }
+
+    return vertices;
+}
+
+// ==================================================
+// GENERATE CYLINDER INDICES
+// ==================================================
+
+function generateCylinderIndices() {
+
+    const indices = [];
+
+    const slices = 40;
+    const stacks = 40;
+
+    for (let i = 0; i < stacks; i++) {
+
+        for (let j = 0; j < slices; j++) {
+
+            const nextJ = (j + 1) % slices;
+
+            const current = i * slices + j;
+            const currentNext = i * slices + nextJ;
+
+            const next = (i + 1) * slices + j;
+            const nextNext = (i + 1) * slices + nextJ;
+
+            // Primeiro triângulo
+            indices.push(
+                current,
+                currentNext,
+                next
+            );
+
+            // Segundo triângulo
+            indices.push(
+                currentNext,
+                nextNext,
+                next
+            );
+        }
+    }
+
+    return indices;
+}
+
+// ==================================================
+// GENERATE SPRING VERTICES
+// ==================================================
+
+function generateSpringVertices() {
+
+    const vertices = [];
+
+    const springRadius = 0.8;  // Raio da mola
+    const wireRadius = 0.15;   // Espessura do fio
+    const height = 8.0;        // Altura total
+    const turns = 8;           // Número de voltas
+
+    const slices = 12;
+    const stacks = 200;
+
+    const pitch = height / (2 * Math.PI * turns);
+
+    for (let i = 0; i <= stacks; i++) {
+
+        const t = i / stacks;
+
+        // Ângulo da hélice
+        const alpha = 2 * Math.PI * turns * t;
+
+        // Centro do fio: trajetória helicoidal
+        const cx = springRadius * Math.cos(alpha);
+        const cy = springRadius * Math.sin(alpha);
+        const cz = height * (t - 0.5);
+
+        // Direção radial da hélice
+        const nx = Math.cos(alpha);
+        const ny = Math.sin(alpha);
+        const nz = 0.0;
+
+        // Segundo vetor da base perpendicular à trajetória
+        let bx = -pitch * Math.sin(alpha);
+        let by =  pitch * Math.cos(alpha);
+        let bz = -springRadius;
+
+        const bLength = Math.sqrt(
+            bx * bx + by * by + bz * bz
+        );
+
+        bx /= bLength;
+        by /= bLength;
+        bz /= bLength;
+
+        // Gera a seção circular do fio
+        for (let j = 0; j < slices; j++) {
+
+            const theta = 2 * Math.PI * j / slices;
+
+            const cosTheta = Math.cos(theta);
+            const sinTheta = Math.sin(theta);
+
+            const x = cx + wireRadius * (
+                cosTheta * nx + sinTheta * bx
+            );
+
+            const y = cy + wireRadius * (
+                cosTheta * ny + sinTheta * by
+            );
+
+            const z = cz + wireRadius * (
+                cosTheta * nz + sinTheta * bz
+            );
+
+            vertices.push(x, y, z);
+        }
+    }
+
+    return vertices;
+}
+
+// ==================================================
+// GENERATE SPRING INDICES
+// ==================================================
+
+function generateSpringIndices() {
+
+    const indices = [];
+
+    const slices = 12;
+    const stacks = 200;
+
+    for (let i = 0; i < stacks; i++) {
+
+        for (let j = 0; j < slices; j++) {
+
+            const nextJ = (j + 1) % slices;
+
+            const current = i * slices + j;
+            const currentNext = i * slices + nextJ;
+
+            const next = (i + 1) * slices + j;
+            const nextNext = (i + 1) * slices + nextJ;
+
+            // Primeiro triângulo
+            indices.push(current, currentNext, next);
+
+            // Segundo triângulo
+            indices.push(currentNext, nextNext, next);
+        }
+    }
+
+    return indices;
+}
+
+
+
 function addNormalsToGeometry(vertices, indices) {
 
     const newVertices = [];
@@ -452,11 +761,26 @@ const torusGeometry = addNormalsToGeometry(
 );
 
 const ellipsoidGeometry = addNormalsToGeometry(
-    generateEllipsoidVertices(2, 1, 0.5),
+    generateEllipsoidVertices(4, 2, 1),
     generateEllipsoidIndices()
 );
 
 const superquadricGeometry = addNormalsToGeometry(
-    generateSuperquadricVertices(2.5, 1.5, 1, 2, 0.5),
+    generateSuperquadricVertices(2, 2, 2, 2.5, 2.5),
     generateSuperquadricIndices()
+);
+
+const wineGlassGeometry = addNormalsToGeometry(
+    generateWineGlassVertices(),
+    generateWineGlassIndices()
+);
+
+const cylinderGeometry = addNormalsToGeometry(
+    generateCylinderVertices(),
+    generateCylinderIndices()
+);
+
+const springGeometry = addNormalsToGeometry(
+    generateSpringVertices(),
+    generateSpringIndices()  
 );

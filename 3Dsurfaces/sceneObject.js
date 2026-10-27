@@ -113,3 +113,54 @@ class Superquadric extends SceneObject{
     }
 }
 
+class WineGlass extends SceneObject{
+    constructor(){
+        super(
+            wineGlassGeometry.vertices,
+            wineGlassGeometry.normals,
+            wineGlassGeometry.indices
+        );
+
+    }
+
+    update(tx,ty,tz,theta){
+        this.modelTransform = m4.multiply(
+            m4.translation(tx,ty,tz),
+            m4.yRotation(theta)
+        );
+    }
+}
+
+class Cylinder extends SceneObject{
+    constructor(){
+        super(
+            cylinderGeometry.vertices,
+            cylinderGeometry.normals,
+            cylinderGeometry.indices
+        );
+    }
+
+    update(tx,ty,tz,theta){
+        this.modelTransform = m4.multiply(
+            m4.translation(tx,ty,tz),
+            m4.yRotation(theta)
+        );
+    }
+}
+
+class Spring extends SceneObject{
+    constructor(){
+        super(
+            springGeometry.vertices,
+            springGeometry.normals,
+            springGeometry.indices
+        );
+    }
+
+    update(tx,ty,tz,theta){
+        this.modelTransform = m4.multiply(
+            m4.translation(tx,ty,tz),
+            m4.yRotation(theta)
+        );
+    }
+}

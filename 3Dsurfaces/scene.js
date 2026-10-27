@@ -87,7 +87,7 @@ class Scene {
 
         document.addEventListener("keydown", (event) => {
 
-            if (["1", "2", "3", "4", "5"].includes(event.key)) {
+            if (["1", "2", "3", "4", "5", "6", "7", "8"].includes(event.key)) {
                 this.changeObject(event.key);
             }
 
@@ -121,6 +121,19 @@ class Scene {
             case "5":
                 this.color = [Math.random(), Math.random(), Math.random()];
                 this.object = new Superquadric();
+                break;
+
+            case "6":
+                this.color = [Math.random(), Math.random(), Math.random()];
+                this.object = new WineGlass();
+                break;
+            case "7":
+                this.color = [Math.random(), Math.random(), Math.random()];
+                this.object = new Cylinder();
+                break;
+            case "8":
+                this.color = [Math.random(), Math.random(), Math.random()];
+                this.object = new Spring();
                 break;
         }
 
