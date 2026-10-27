@@ -17,6 +17,13 @@ class SceneObject {
         this.modelTransform = m4.identity();
     }
 
+    update(tx,ty,tz,theta){
+        this.modelTransform = m4.multiply(
+            m4.translation(tx,ty,tz),
+            m4.yRotation(theta)
+        );
+    }
+
     draw(renderer, color, viewTransform, projectionTransform, lightPosition, viewPosition) {
 
         renderer.draw(this, color, viewTransform, projectionTransform, lightPosition, viewPosition);
@@ -32,13 +39,6 @@ class Cube extends SceneObject{
         );
 
     }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
-    }
 }
 
 class Sphere extends SceneObject{
@@ -49,13 +49,6 @@ class Sphere extends SceneObject{
             sphereGeometry.indices
         );
 
-    }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
     }
 }
 
@@ -68,13 +61,6 @@ class Torus extends SceneObject{
         );
 
     }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
-    }
 }
 
 class Ellipsoid extends SceneObject{
@@ -85,13 +71,6 @@ class Ellipsoid extends SceneObject{
             ellipsoidGeometry.indices
         );
 
-    }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
     }
 }
 
@@ -104,13 +83,6 @@ class Superquadric extends SceneObject{
         );
 
     }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
-    }
 }
 
 class WineGlass extends SceneObject{
@@ -122,13 +94,6 @@ class WineGlass extends SceneObject{
         );
 
     }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
-    }
 }
 
 class WavyCylinder extends SceneObject{
@@ -139,13 +104,6 @@ class WavyCylinder extends SceneObject{
             wavyCylinderGeometry.indices
         );
     }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
-        );
-    }
 }
 
 class Spring extends SceneObject{
@@ -154,13 +112,6 @@ class Spring extends SceneObject{
             springGeometry.vertices,
             springGeometry.normals,
             springGeometry.indices
-        );
-    }
-
-    update(tx,ty,tz,theta){
-        this.modelTransform = m4.multiply(
-            m4.translation(tx,ty,tz),
-            m4.yRotation(theta)
         );
     }
 }
