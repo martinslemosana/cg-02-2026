@@ -39,6 +39,8 @@ class Scene {
         // Configura o teclado
         this.setupKeyboard();
 
+        this.setupSuperquadricControls();
+
 
         const P0 = [6, 5, 10]; // Ponto de observação
         const Pref = [0, 0, 0]; // Ponto de referência
@@ -49,22 +51,7 @@ class Scene {
             V      // Vetor "up" (V)
         );
 
-    /*
-        this.projectionTransform = m4.setOrthographicProjectionMatrix(
-            -1, 1,   // left, right
-            -1, 1,   // bottom, top
-            -5, -100 // near, far
-        );
-    */
-    
-    /*
-        this.projectionTransform = m4.setPerspectiveProjectionMatrix(
-            -1, 1,   // left, right
-            -1, 1,   // bottom, top
-            -2, -100 // near, far
-        );
-    */
-	
+        
         const fov = 60 * Math.PI / 180;
         const aspect = canvas.width / canvas.height;
         const near = -5;
@@ -145,6 +132,42 @@ class Scene {
             this.theta
         );
     }
+
+
+    setupSuperquadricControls() {
+
+        const n1Slider = document.getElementById("n1Slider");
+        const n2Slider = document.getElementById("n2Slider");
+
+        const n1Value = document.getElementById("n1Value");
+        const n2Value = document.getElementById("n2Value");
+
+        const updateGeometry = () => {
+
+            const n1 = Number(n1Slider.value);
+            const n2 = Number(n2Slider.value);
+
+            // Atualiza os valores exibidos
+            n1Value.textContent = n1.toFixed(1);
+            n2Value.textContent = n2.toFixed(1);
+
+            // Gera novos vértices e calcula as normais
+            updateSuperquadricGeometry(n1, n2);
+
+            // Se a superquádrica estiver em cena,
+            // atualiza os dados usados pelo Renderer
+            if (this.object instanceof Superquadric) {
+
+                this.object.vertices = superquadricGeometry.vertices;
+                this.object.normals = superquadricGeometry.normals;
+                this.object.indices = superquadricGeometry.indices;
+            }
+        };
+
+        n1Slider.addEventListener("input", updateGeometry);
+        n2Slider.addEventListener("input", updateGeometry);
+    }
+
 
     update() {
         // Atualiza a posição

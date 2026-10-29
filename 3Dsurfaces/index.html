@@ -3,11 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Representação 3D</title>
+
+
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .controls {
+            width: 300px;
+            margin-bottom: 12px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+    </style>
+
 </head>
 
 <body>
 
     <canvas id="canvas" width="600" height="600"></canvas>
+
+    <div class="controls">
+        <label for="n1Slider">
+            Parâmetro n1:
+            <span id="n1Value">2.5</span>
+        </label>
+        <input
+            type="range"
+            id="n1Slider"
+            min="0.2"
+            max="4.0"
+            step="0.1"
+            value="2.5"
+        >
+    </div>
+
+    <div class="controls">
+        <label for="n2Slider">
+            Parâmetro n2:
+            <span id="n2Value">2.5</span>
+        </label>
+        <input
+            type="range"
+            id="n2Slider"
+            min="0.2"
+            max="4.0"
+            step="0.1"
+            value="2.5"
+        >
+    </div>
 
     <script src="m4.js"></script>
     <script src="objectsGeometry.js"></script>

@@ -810,6 +810,27 @@ const superquadricGeometry = addNormalsToGeometry(
     generateSuperquadricIndices()
 );
 
+
+function updateSuperquadricGeometry(n1, n2) {
+
+    const geometry = addNormalsToGeometry(
+        generateSuperquadricVertices(
+            2, 2, 2,
+            n1,
+            n2
+        ),
+        generateSuperquadricIndices()
+    );
+
+    // Atualiza a geometria compartilhada
+    superquadricGeometry.vertices = geometry.vertices;
+    superquadricGeometry.normals = geometry.normals;
+    superquadricGeometry.indices = geometry.indices;
+
+    return geometry;
+}
+
+
 const wineGlassGeometry = addNormalsToGeometry(
     generateWineGlassVertices(),
     generateWineGlassIndices()
