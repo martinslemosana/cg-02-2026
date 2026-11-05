@@ -1,62 +1,246 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Representação 3D</title>
 
-
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #1a1a1a;
-            color: white;
+            margin: 0;
+            min-height: 100vh;
+            background: #101827;
+            color: #e5e7eb;
             font-family: Arial, sans-serif;
         }
 
-        .controls {
+        header {
+            padding: 22px 35px;
+            background: #172338;
+            border-bottom: 1px solid #29384f;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin: 7px 0 0;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            padding: 35px 20px;
+            flex-wrap: wrap;
+        }
+
+        .canvas-container {
+            padding: 15px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            display: block;
+            width: 600px;
+            height: 600px;
+            max-width: 100%;
+            background: #071b34;
+            border-radius: 6px;
+        }
+
+        .panel {
             width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            padding: 22px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+        }
+
+        .card h2 {
+            margin: 0 0 18px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .control {
+            margin-bottom: 22px;
+        }
+
+        .control:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .value {
+            min-width: 42px;
+            padding: 4px 8px;
+            text-align: center;
+            color: #7dd3fc;
+            background: #0f253d;
+            border-radius: 5px;
+            font-weight: bold;
         }
 
         input[type="range"] {
             width: 100%;
+            accent-color: #38bdf8;
+            cursor: pointer;
+        }
+
+        .instructions {
+            font-size: 13px;
+            line-height: 1.8;
+            color: #cbd5e1;
+        }
+
+        .instructions p {
+            margin: 5px 0;
+        }
+
+        kbd {
+            display: inline-block;
+            min-width: 25px;
+            padding: 2px 6px;
+            margin-right: 5px;
+            text-align: center;
+            color: #f8fafc;
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        footer {
+            padding: 15px;
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 20px 12px;
+            }
+
+            .canvas-container {
+                width: 100%;
+            }
+
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+
+            .panel {
+                width: 100%;
+                max-width: 600px;
+            }
         }
     </style>
-
 </head>
 
 <body>
 
-    <canvas id="canvas" width="600" height="600"></canvas>
+    <header>
+        <h1>Representação 3D</h1>
+        <p>Visualização de objetos geométricos e modelos de iluminação</p>
+    </header>
 
-    <div class="controls">
-        <label for="n1Slider">
-            Parâmetro n1:
-            <span id="n1Value">2.5</span>
-        </label>
-        <input
-            type="range"
-            id="n1Slider"
-            min="0.6"
-            max="4.0"
-            step="0.1"
-            value="2.5"
-        >
-    </div>
+    <main>
 
-    <div class="controls">
-        <label for="n2Slider">
-            Parâmetro n2:
-            <span id="n2Value">2.5</span>
-        </label>
-        <input
-            type="range"
-            id="n2Slider"
-            min="0.2"
-            max="4.0"
-            step="0.1"
-            value="2.5"
-        >
-    </div>
+        <section class="canvas-container">
+            <canvas id="canvas" width="600" height="600"></canvas>
+        </section>
+
+        <aside class="panel">
+
+            <section class="card">
+                <h2>Parâmetros da Superfície</h2>
+
+                <div class="control">
+                    <div class="control-header">
+                        <label for="n1Slider">Parâmetro n1</label>
+                        <span class="value" id="n1Value">2.5</span>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="n1Slider"
+                        min="0.6"
+                        max="4.0"
+                        step="0.1"
+                        value="2.5"
+                    >
+                </div>
+
+                <div class="control">
+                    <div class="control-header">
+                        <label for="n2Slider">Parâmetro n2</label>
+                        <span class="value" id="n2Value">2.5</span>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="n2Slider"
+                        min="0.2"
+                        max="4.0"
+                        step="0.1"
+                        value="2.5"
+                    >
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Controles do Teclado</h2>
+
+                <div class="instructions">
+                    <p><kbd>1</kbd> a <kbd>8</kbd> Selecionar objeto</p>
+                    <p><kbd>F</kbd> Flat Shading</p>
+                    <p><kbd>G</kbd> Gouraud Shading</p>
+                    <p><kbd>P</kbd> Phong Shading</p>
+                </div>
+            </section>
+
+        </aside>
+
+    </main>
+
+    <footer>
+        Computação Gráfica — WebGL 2.0
+    </footer>
 
     <script src="m4.js"></script>
     <script src="objectsGeometry.js"></script>
